@@ -4,8 +4,8 @@
 
 WifiManager wifi; 
 
-#define WIFI "Sebs"
-#define PASSWORD "Internet"
+#define WIFI "68 Middle Street"
+#define PASSWORD "thund3rstorm"
 
 const int wifiLed = 2; 
 

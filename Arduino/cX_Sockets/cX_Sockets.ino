@@ -1,27 +1,22 @@
 
 #include <Adafruit_CC3000.h>
 #include <SPI.h>
-#include "WifiManager.h"
+#include "ST4iWifiManager.h"
 #include <WebSocketClient.h>
 #include <JsonParser.h>
 using namespace ArduinoJson::Parser;
 
-#include <LiquidCrystal.h>
-LiquidCrystal lcd(19,18,17,16,15,14);
-
-WifiManager wifi; 
+ST4iWifiManager wifi; 
 
 #define SERVER      "node.seb.ly"
 #define PATH         "/"
-#define PORT         8103
+#define PORT         8102
 
-
-#define WIFI "68 Middle Street"
-#define PASSWORD "thund3rstorm"
+#define WIFI "Sebs"
+#define PASSWORD "Internet"
 
 // Change this to YOUR name!
-String id = String("Seb");
-
+String group = String("Seb");
 
 JsonParser<100> parser;
 
@@ -38,17 +33,10 @@ unsigned long lastSend;
 WebSocketClient wsclient;
 
 void setup() {
-  lcd.begin(16, 2);
-  lcd.clear();
-  lcd.print("Connecting...");
   Serial.begin(115200);
 
-  // wifi.init(int okLedPin, int brightness (0 to 255, but only works on PWM pins))
   wifi.init(wifiLed, 30); 
   wifi.connect(WIFI, PASSWORD, WLAN_SEC_WPA2); 
-
-  lcd.setCursor(0,1);
-  lcd.print("Wifi OK");
 
   pinMode(ledPin, OUTPUT); 
   pinMode(buttonPin, INPUT); 
@@ -58,24 +46,10 @@ void setup() {
   digitalWrite(ledPin, LOW);
 
 
-  Serial.println("connecting to socket server");
+ 
+  connectWebsocket(); 
 
-
-  while(!wsclient.connect(&wifi.client, SERVER, PATH, PORT)) { 
-    Serial.println("couldn't connect :( Trying again..."); 
-    delay(1000);  
-
-  }
-
-  lcd.setCursor(0,1);
-  lcd.print("Socket Connected");
-
-
-  Serial.println("Socket connected!"); 
-  wsclient.setDataArrivedDelegate(dataArrived);
-  String sendstring = String(String("{\"type\" : \"register\", \"id\" : \"")+id+String("\"}"));
-  wsclient.send(sendstring);
-  lastSend = millis(); 
+ 
 
 }
 
@@ -85,12 +59,19 @@ void loop() {
   wifi.monitor(); 
   // check websocket
   wsclient.monitor();
+  
+  if(!wsclient.connected()) {
+    Serial.println("Websocket disconnected, reconnecting");
+     // try reconnecting!  
+     connectWebsocket(); 
+  }
 
   // heartbeat code to keep the connection alive 
   if(millis() - lastSend > heartbeatFrequency) { 
     Serial.print("*"); 
     wsclient.send("{\"type\" : \"heartbeat\"}");
     lastSend = millis();
+   
   }
 
 
@@ -99,11 +80,14 @@ void loop() {
     String msg; 
 
     if(buttonPushed) 
-      msg = String("{\"type\" : \"light\", \"data\" : 1, \"id\" : \"")+id+String("\"}");
+      msg = String("{\"type\" : \"light\", \"data\" : 1, \"group\" : \"")+group+String("\"}");
     else 
-      msg = String("{\"type\" : \"light\", \"data\" : 0, \"id\" : \"")+id+String("\"}");
+      msg = String("{\"type\" : \"light\", \"data\" : 0, \"group\" : \"")+group+String("\"}");
+    Serial.print("sending : "); 
+    Serial.println(msg); 
 
     wsclient.send(msg);
+    Serial.println("sent");
   }
 
 
@@ -118,9 +102,9 @@ void dataArrived(WebSocketClient wsclient, String data) {
   JsonObject json = parser.parse(jsonchar);
   Serial.println("Data Arrived: " + data);
 
-  const char* msgid = json["id"]; 
+  const char* msggroup = json["group"]; 
 
-  if(strcmp(msgid, id.c_str())!=0) return; 
+  if(strcmp(msggroup, group.c_str())!=0) return; 
 
   const char* type = json["type"]; 
 
@@ -145,22 +129,28 @@ void dataArrived(WebSocketClient wsclient, String data) {
     Serial.println("found message"); 
     char* msg = json["data"]; 
     Serial.println(msg);
-    printString(msg); 
+    
   }
 }
 
-void printString(char * msg) { 
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print(msg);
 
+void connectWebsocket() { 
+  
+  wsclient = WebSocketClient(); 
+  Serial.println("connecting to socket server");
+
+  while(!wsclient.connect(&wifi.client, SERVER, PATH, PORT)) { 
+    Serial.println("couldn't connect :( Trying again..."); 
+    delay(1000);  
+  }
+  Serial.println("Connected to Websocket server!"); 
+
+  Serial.println("Socket connected!"); 
+  wsclient.setDataArrivedDelegate(dataArrived);
+  String sendstring = String(String("{\"type\" : \"register\", \"group\" : \"")+group+String("\"}"));
+  wsclient.send(sendstring);
+  lastSend = millis(); 
 
 }
-
-
-
-
-
-
 
 

@@ -3,15 +3,19 @@
 
 #include "Adafruit_CC3000.h"
 #include <SPI.h>
-#include "WifiManager.h"
+#include "ST4iWifiManager.h"
 
+
+
+#define WIFI "68 Middle Street"
+#define PASSWORD "thund3rstorm"
 
 #include <JsonParser.h>
 #include "utility/debug.h" // for the freemem util
 #include <Time.h>
 
 using namespace ArduinoJson::Parser;
-WifiManager wifi; 
+ST4iWifiManager wifi; 
 
 #define BUZZER_PIN 34
 #define WIFI_OK_LED 2
@@ -35,14 +39,17 @@ void setup() {
   // initialise the wifi manager and connect to the network
   wifi.init(WIFI_OK_LED, 30); 
   
-  wifi.connect("Sebs", "Internet", WLAN_SEC_WPA2); 
+  wifi.connect(WIFI, PASSWORD, WLAN_SEC_WPA2); 
 
   
+  // first step - where are we? Ask a geoip server!
+  // give it your ip address and it tells you your lat / long
   jsonString = wifi.getWebPage("www.telize.com", "/geoip"); 
 
 
   Serial.println("--------------------");
-
+  
+  // extract the lat long from the json string that you get back
   char jsonchar[jsonString.length()+1];
   jsonString.toCharArray(jsonchar, jsonString.length()+1);
   JsonObject root = parser.parse(jsonchar);
@@ -50,14 +57,21 @@ void setup() {
   if (!root.success())
   {
     Serial.println("JsonParser.parse() failed");
+    
+    // probably should fail a bit more gracefully than this...
     return;
   }
+  
   char* latitude = root["latitude"]; 
   Serial.println(latitude); 
 
   char* longitude = root["longitude"]; 
   Serial.println(longitude); 
 
+  // Open notify tells us the next over pass of the ISS 
+  // based on our lat long. 
+  // Figure out the URL path that we need, and insert the 
+  // lat/long into the query string
   char path[255];
   sprintf(path,"/iss-pass.json?lat=%s&lon=%s&n=2",latitude, longitude);
 
@@ -65,22 +79,21 @@ void setup() {
   Serial.print("api.open-notify.org"); 
   Serial.println(path);
 
-
+  // and get the web page - this function blocks
   jsonString = wifi.getWebPage("api.open-notify.org", path);
 
-  ///pos = jsonString.indexOf("\r\n\r\n");
-  //jsonString = jsonString.substring(pos+4);
   Serial.print("RAM : ");
   Serial.println(getFreeRam(), DEC);
   Serial.println("--------------------");
 
-  //char jsonchar2[jsonString.length()+1];
   jsonString.toCharArray(jsonchar, jsonString.length()+1);
   Serial.println("parsing json");
 
   Serial.println("------------"); 
   Serial.print(jsonchar); 
   Serial.println("------------"); 
+
+  // parse the json
   JsonObject root2 = parser.parse(jsonchar);
 
   if (!root2.success())
@@ -88,7 +101,8 @@ void setup() {
     Serial.println("JsonParser.parse() failed");
     return;
   }   
-
+  
+  // if it worked, then we can extract the info that we need!
   Serial.println("SUCCESS!"); 
   Serial.println(getFreeRam(), DEC);
 
@@ -100,8 +114,8 @@ void setup() {
   Serial.println(nextPassTime); 
   Serial.println(time); 
 
-
-
+  // the open notify api tells us the time too, so set our 
+  // internal clock using that! 
   setTime(time); // should probably subtract latency
 
   Serial.println("NOW"); 
@@ -122,22 +136,16 @@ void setup() {
 // convert it to days / hours / mins / secs / cents
 // if it's less than 1 min make alarm
 // if it's now then turn on LED strip and countdown pass time
-// if it's finished then 
+// if it's finished then load the data again. (TO DO)
 
 void loop() { 
   //  Serial.println(nextPassTime - millis()); 
 
-
   time_t timetopass = nextPassTime - now(); 
 
-  //digitalClockDisplay(nextPassTime); 
-  //digitalClockDisplay(now()); 
-  //printHoursMinsSecs(timetopass); 
-
   showTimer(timetopass); 
-  // Serial.println(timetopass);
-  //delay(1000); 
 
+  // if it's flying over MAKE SOME NOISE! WOOOO
   while((now()>nextPassTime) && (now()<nextPassTime+duration)) { 
     tone(BUZZER_PIN,500,200); 
     delay(600); 

@@ -1,3 +1,7 @@
+#include <SoftwareServo.h>
+
+
+
 /*
 SparkFun Inventor's Kit
 Example sketch 08
@@ -85,7 +89,8 @@ void setup()
   // release the servo (allowing it to be turned by hand),
   // you can call servo1.detach().
 
-  servo1.attach(28);
+  servo1.attach(23);
+ 
 }
 
 

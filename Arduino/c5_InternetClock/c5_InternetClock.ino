@@ -1,32 +1,30 @@
 
 #include "Adafruit_CC3000.h"
 #include "SPI.h"
-#include "WifiManager.h"
+#include "ST4iWifiManager.h"
 #include "LedControl.h"
 
 #include <Time.h>
 
-WifiManager wifi; 
+ST4iWifiManager wifi; 
 
 #define WIFI "68 Middle Street"
 #define PASSWORD "thund3rstorm"
 
 const int wifiLed = 2; 
 const int photocellPin = A8; 
+const int potPin = A5; 
 
 LedControl lc=LedControl(26,30,28,1);
 
-const unsigned long
-//connectTimeout  = 15L * 1000L, // Max time to wait for server connection
-responseTimeout = 15L * 1000L; // Max time to wait for data from server
-int
-countdown       = 0;  // loop() iterations until next time server query
-unsigned long
-lastPolledTime  = 0L, // Last value retrieved from time server
-sketchTime      = 0L; // CPU milliseconds since last server query
-Adafruit_CC3000_Client client;
-time_t prevDisplay = 0; // when the digital clock was displayed
+const unsigned long responseTimeout = 15L * 1000L; // Max time to wait for data from server
+int countdown       = 0;  // loop() iterations until next time server query
+unsigned long lastPolledTime  = 0L, // Last value retrieved from time server
+              sketchTime      = 0L; // CPU milliseconds since last server query
 
+Adafruit_CC3000_Client client;
+
+time_t prevDisplay = 0; // when the digital clock was displayed
 
 void setup() { 
 
@@ -36,12 +34,15 @@ void setup() {
 
   // wifi.init(int okLedPin, int brightness (0 to 255, but only works on PWM pins))
   wifi.init(wifiLed, 30); 
+  
   // SSID, password, security type
   wifi.connect(WIFI, PASSWORD, WLAN_SEC_WPA2); 
 
 }
 
 void loop() {
+  
+  
   if(countdown == 0) {            // Time's up?
     unsigned long t  = getTime(); // Query time server
     if(t) {                       // Success?
@@ -64,7 +65,8 @@ void loop() {
     }
   }
 
-  int brightness = constrain(map(analogRead(photocellPin), 400,800,1,10),1,10); 
+  int brightness = map(analogRead(potPin),0,1024,0,15); 
+  //int brightness = constrain(map(analogRead(photocellPin), 400,800,1,10),1,10); 
   lc.setIntensity(0,brightness);
   
   delay(10L); // Pause 1 second

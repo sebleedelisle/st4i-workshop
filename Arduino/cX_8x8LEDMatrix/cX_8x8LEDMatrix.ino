@@ -3,11 +3,12 @@
 
 /*
  Now we need a LedControl to work with.
- ***** These pin numbers will probably not work with your hardware *****
+ Connect VCC to 5v, GND to ground. 
  pin 12 is connected to the DataIn 
  pin 11 is connected to the CLK 
  pin 10 is connected to LOAD 
  We have only a single MAX72XX.
+ 
  */
 LedControl lc=LedControl(14,15,16,1);
 
@@ -125,12 +126,7 @@ void columns() {
     lc.setColumn(0,col,B11111111);
     delay(delaytime);
     lc.setColumn(0,col,(byte)0);
-   // for(int i=0;i<col;i++) {
-//      delay(delaytime);
-//      lc.setColumn(0,col,B11111111);
-//      delay(delaytime);
-//      lc.setColumn(0,col,(byte)0);
-    //}
+  
   }
 }
 
@@ -145,12 +141,7 @@ void single() {
       delay(delaytime/10);
       lc.setLed(0,row,col,true);
       delay(delaytime/10);
-      //for(int i=0;i<col;i++) {
         lc.setLed(0,row,col,false);
-//        delay(delaytime);
-//        lc.setLed(0,row,col,true);
-//        delay(delaytime);
-      //}
     }
   }
 }

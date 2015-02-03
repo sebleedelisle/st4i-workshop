@@ -1,7 +1,7 @@
 /*
 
  ButtonLED
- Makes the LED stay on for a second - non-blocking code version!
+ Makes the LED flash five times - non-blocking code version!
  
  If you can make your code non-blocking it's always better, especially if you're 
  also reading and writing data to the internet.
@@ -27,7 +27,7 @@ void loop() {
   boolean buttonPushed = !digitalRead(buttonPin); // read the button pin
 
   if(buttonPushed) { 
-    digitalWrite(ledPin, HIGH);    // turn the LED on
+    //digitalWrite(ledPin, HIGH);    // turn the LED on
     lastButtonPushTime = millis(); // set the last time the button was pressed to now
   } 
   
@@ -37,8 +37,9 @@ void loop() {
   // Note the typing to unsigned long in the if statement - that gets around 
   // the fact that millis() resets to zero after 9.5 hours
   
-  if((unsigned long) (millis()-lastButtonPushTime) > 1000) { 
-     digitalWrite(ledPin, LOW);  
+  unsigned long milsSinceLastPress = (unsigned long)(millis()-lastButtonPushTime); 
+  if(milsSinceLastPress < 1800) { 
+     digitalWrite(ledPin, (milsSinceLastPress%300) < 150);  
   }
 
 }

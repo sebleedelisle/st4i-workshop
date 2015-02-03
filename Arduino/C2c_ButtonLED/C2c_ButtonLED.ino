@@ -1,15 +1,17 @@
 /*
 
  ButtonLED
- Makes the LED come off when you push the button
+ Makes the LED stay on for a second - non-blocking code version!
  
- Tasks : Make the LED switch on when you push the button 
- Make the LED stay on for at least a second
- Make the LED flash 3 times when you push the button
+ If you can make your code non-blocking it's always better, especially if you're 
+ also reading and writing data to the internet.
+
  */
 
 const int ledPin = 2;
 const int buttonPin = 21; 
+
+unsigned long lastButtonPushTime = 0; 
 
 // the setup routine runs at the start
 
@@ -23,13 +25,20 @@ void setup() {
 void loop() {
 
   boolean buttonPushed = !digitalRead(buttonPin); // read the button pin
+
   if(buttonPushed) { 
     digitalWrite(ledPin, HIGH);    // turn the LED on
-    while(!digitalRead(buttonPin)); // wait til the button is released
-    delay(1000); // wait a second
+    lastButtonPushTime = millis(); // set the last time the button was pressed to now
   } 
-  else { 
-    digitalWrite(ledPin, LOW); 
+  
+  // if it's more than a second since we last pressed the button, then 
+  // turn the LED off.
+  
+  // Note the typing to unsigned long in the if statement - that gets around 
+  // the fact that millis() resets to zero after 9.5 hours
+  
+  if((unsigned long) (millis()-lastButtonPushTime) > 1000) { 
+     digitalWrite(ledPin, LOW);  
   }
 
 }

@@ -16,7 +16,7 @@
 
 const int connectTimeout = 15L * 1000L;
 
-class WifiManager { 
+class ST4iWifiManager { 
 
 	public :
 
@@ -36,7 +36,7 @@ class WifiManager {
 		float
 		  longitude, latitude;
 		
-	WifiManager() : cc3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+	ST4iWifiManager() : cc3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
 	SPI_CLOCK_DIVIDER)  { 
 		ip = 0; 
 		t = 0;
@@ -70,7 +70,7 @@ class WifiManager {
 			
 			if(ledPin>-1) analogWrite(ledPin,ledBrightness); 
 		} else { 
-			if(ledPin>-1) analogWrite(ledPin,2); 
+			if(ledPin>-1) digitalWrite(ledPin,(millis()%400)<200); 
 		}
 		
 	}
