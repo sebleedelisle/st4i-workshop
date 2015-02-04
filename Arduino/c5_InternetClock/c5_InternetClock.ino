@@ -66,7 +66,7 @@ void loop() {
   }
 
   int brightness = map(analogRead(potPin),0,1024,0,15); 
-  //int brightness = constrain(map(analogRead(photocellPin), 400,800,1,10),1,10); 
+  //int brightness = constrain(map(analogRead(photocellPin), 400,800,0,15),0,15); 
   lc.setIntensity(0,brightness);
   
   delay(10L); // Pause 1 second

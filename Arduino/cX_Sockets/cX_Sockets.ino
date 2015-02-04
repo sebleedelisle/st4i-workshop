@@ -23,6 +23,7 @@ JsonParser<100> parser;
 const int ledPin = 44; 
 const int buttonPin = 21;
 const int wifiLed = 2; 
+const int buzzerPin = 34; 
 const int heartbeatFrequency = 20000; 
 
 boolean buttonPushed = false; 
@@ -69,7 +70,7 @@ void loop() {
   // heartbeat code to keep the connection alive 
   if(millis() - lastSend > heartbeatFrequency) { 
     Serial.print("*"); 
-    wsclient.send("{\"type\" : \"heartbeat\"}");
+    wsclient.send(String("{\"type\" : \"heartbeat\", \"group\" : \"")+group+String("\"}"));
     lastSend = millis();
    
   }
@@ -116,12 +117,12 @@ void dataArrived(WebSocketClient wsclient, String data) {
 
     if(state==1) {
       digitalWrite(ledPin, HIGH); 
-      tone(9,294);
+      tone(buzzerPin,294);
 
     } 
     else {
       digitalWrite(ledPin, LOW); 
-      noTone(9);
+      noTone(buzzerPin);
     }
   } 
   else if(strcmp(type,"message")==0) { 

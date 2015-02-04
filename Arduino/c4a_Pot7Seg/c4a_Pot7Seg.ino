@@ -1,5 +1,5 @@
+#include <LedControl.h>
 #include <HSBColor.h>
-#include "LedControl.h"
 
 // LedControl is the library for running the 
 // 7 segment LED display. Set it up with the 

@@ -6,13 +6,8 @@
 #include <JsonParser.h>
 using namespace ArduinoJson::Parser;
 
-#include "SoftwareSerial.h"
-#include "Adafruit_Thermal.h"
-
-int printer_RX_Pin = 18;  // This is the green wire
-int printer_TX_Pin = 19;  // This is the blue wire
-
-Adafruit_Thermal printer(printer_RX_Pin, printer_TX_Pin);
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(19,18,17,16,15,14);
 
 ST4iWifiManager wifi; 
 
@@ -20,19 +15,18 @@ ST4iWifiManager wifi;
 #define PATH         "/"
 #define PORT         8102
 
-
-#define WIFI "Sebs"
-#define PASSWORD "Internet"
+#define WIFI "68 Middle Street"
+#define PASSWORD "thund3rstorm"
 
 // Change this to YOUR name!
 String group = String("Seb");
-
 
 JsonParser<100> parser;
 
 const int ledPin = 44; 
 const int buttonPin = 21;
 const int wifiLed = 2; 
+const int buzzerPin = 34; 
 const int heartbeatFrequency = 20000; 
 
 boolean buttonPushed = false; 
@@ -43,17 +37,18 @@ unsigned long lastSend;
 WebSocketClient wsclient;
 
 void setup() {
-
   Serial.begin(115200);
-
-  // wifi.init(int okLedPin, int brightness (0 to 255, but only works on PWM pins))
+  
+  // 16 x 2 characters
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.print("Connecting...");
+ 
   wifi.init(wifiLed, 30); 
   wifi.connect(WIFI, PASSWORD, WLAN_SEC_WPA2); 
 
-
-  printer.begin(255);
-  printString("READY FOR INPUT!");
-
+  lcd.setCursor(0,1);
+  lcd.print("Wifi OK");
 
   pinMode(ledPin, OUTPUT); 
   pinMode(buttonPin, INPUT); 
@@ -63,19 +58,12 @@ void setup() {
   digitalWrite(ledPin, LOW);
 
 
-  Serial.println("connecting to socket server");
+ 
+  connectWebsocket(); 
+  lcd.setCursor(0,1);
+  lcd.print("Socket Connected");
 
-
-  while(!wsclient.connect(&wifi.client, SERVER, PATH, PORT)) { 
-    Serial.println("couldn't connect :( Trying again..."); 
-    delay(1000);  
-
-  }
-  Serial.println("Socket connected!"); 
-  wsclient.setDataArrivedDelegate(dataArrived);
-  String sendstring = String(String("{\"type\" : \"register\", \"group\" : \"")+group+String("\"}"));
-  wsclient.send(sendstring);
-  lastSend = millis(); 
+ 
 
 }
 
@@ -85,12 +73,19 @@ void loop() {
   wifi.monitor(); 
   // check websocket
   wsclient.monitor();
+  
+  if(!wsclient.connected()) {
+    Serial.println("Websocket disconnected, reconnecting");
+     // try reconnecting!  
+     connectWebsocket(); 
+  }
 
   // heartbeat code to keep the connection alive 
   if(millis() - lastSend > heartbeatFrequency) { 
     Serial.print("*"); 
-    wsclient.send("{\"type\" : \"heartbeat\"}");
+    wsclient.send(String("{\"type\" : \"heartbeat\", \"group\" : \"")+group+String("\"}"));
     lastSend = millis();
+   
   }
 
 
@@ -102,8 +97,11 @@ void loop() {
       msg = String("{\"type\" : \"light\", \"data\" : 1, \"group\" : \"")+group+String("\"}");
     else 
       msg = String("{\"type\" : \"light\", \"data\" : 0, \"group\" : \"")+group+String("\"}");
+    Serial.print("sending : "); 
+    Serial.println(msg); 
 
     wsclient.send(msg);
+    Serial.println("sent");
   }
 
 
@@ -132,12 +130,12 @@ void dataArrived(WebSocketClient wsclient, String data) {
 
     if(state==1) {
       digitalWrite(ledPin, HIGH); 
-      tone(9,294);
+      tone(buzzerPin,294);
 
     } 
     else {
       digitalWrite(ledPin, LOW); 
-      noTone(9);
+      noTone(buzzerPin);
     }
   } 
   else if(strcmp(type,"message")==0) { 
@@ -145,21 +143,39 @@ void dataArrived(WebSocketClient wsclient, String data) {
     Serial.println("found message"); 
     char* msg = json["data"]; 
     Serial.println(msg);
-    printString(msg); 
+    showStringOnLCD(msg); 
+    
   }
 }
 
-void printString(char * msg) { 
-  printer.wake(); 
-  delay(1000);
-  printer.println(msg); 
-  printer.feed(2);
-  printer.sleep();
+
+
+void showStringOnLCD(char * msg) { 
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(msg);
+
 
 }
 
 
+void connectWebsocket() { 
+  
+  wsclient = WebSocketClient(); 
+  Serial.println("connecting to socket server");
 
+  while(!wsclient.connect(&wifi.client, SERVER, PATH, PORT)) { 
+    Serial.println("couldn't connect :( Trying again..."); 
+    delay(1000);  
+  }
+  Serial.println("Connected to Websocket server!"); 
 
+  Serial.println("Socket connected!"); 
+  wsclient.setDataArrivedDelegate(dataArrived);
+  String sendstring = String(String("{\"type\" : \"register\", \"group\" : \"")+group+String("\"}"));
+  wsclient.send(sendstring);
+  lastSend = millis(); 
+
+}
 
 
