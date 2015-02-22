@@ -98,7 +98,7 @@ void connectWebsocket() {
 
   wsclient = WebSocketClient(); 
   Serial.println("connecting to socket server");
-
+  
   while(!wsclient.connect(&wifi.client, SERVER, PATH, PORT)) { 
     Serial.println("couldn't connect :( Trying again..."); 
     delay(1000);  

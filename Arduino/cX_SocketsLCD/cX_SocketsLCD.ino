@@ -19,7 +19,7 @@ ST4iWifiManager wifi;
 #define PASSWORD "thund3rstorm"
 
 // Change this to YOUR name!
-String group = String("Seb");
+String id = String("Seb");
 
 JsonParser<100> parser;
 
@@ -83,7 +83,7 @@ void loop() {
   // heartbeat code to keep the connection alive 
   if(millis() - lastSend > heartbeatFrequency) { 
     Serial.print("*"); 
-    wsclient.send(String("{\"type\" : \"heartbeat\", \"group\" : \"")+group+String("\"}"));
+    wsclient.send(String("{\"type\" : \"heartbeat\", \"id\" : \"")+id+String("\"}"));
     lastSend = millis();
    
   }
@@ -94,9 +94,9 @@ void loop() {
     String msg; 
 
     if(buttonPushed) 
-      msg = String("{\"type\" : \"light\", \"data\" : 1, \"group\" : \"")+group+String("\"}");
+      msg = String("{\"type\" : \"light\", \"data\" : 1, \"id\" : \"")+id+String("\"}");
     else 
-      msg = String("{\"type\" : \"light\", \"data\" : 0, \"group\" : \"")+group+String("\"}");
+      msg = String("{\"type\" : \"light\", \"data\" : 0, \"id\" : \"")+id+String("\"}");
     Serial.print("sending : "); 
     Serial.println(msg); 
 
@@ -116,9 +116,9 @@ void dataArrived(WebSocketClient wsclient, String data) {
   JsonObject json = parser.parse(jsonchar);
   Serial.println("Data Arrived: " + data);
 
-  const char* msggroup = json["group"]; 
+  const char* msgid = json["id"]; 
 
-  if(strcmp(msggroup, group.c_str())!=0) return; 
+  if(strcmp(msgid, id.c_str())!=0) return; 
 
   const char* type = json["type"]; 
 
@@ -172,7 +172,7 @@ void connectWebsocket() {
 
   Serial.println("Socket connected!"); 
   wsclient.setDataArrivedDelegate(dataArrived);
-  String sendstring = String(String("{\"type\" : \"register\", \"group\" : \"")+group+String("\"}"));
+  String sendstring = String(String("{\"type\" : \"register\", \"id\" : \"")+id+String("\"}"));
   wsclient.send(sendstring);
   lastSend = millis(); 
 

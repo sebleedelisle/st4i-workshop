@@ -10,7 +10,7 @@
  We have only a single MAX72XX.
  
  */
-LedControl lc=LedControl(14,15,16,1);
+LedControl lc=LedControl(26,27,28,1);
 
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=100;
