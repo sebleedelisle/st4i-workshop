@@ -10,8 +10,8 @@ ST4iWifiManager wifi;
 #define PATH         "/"
 #define PORT         8101
 
-#define WIFI "68 Middle Street"
-#define PASSWORD "thund3rstorm"
+#define WIFI "MyWifiNetwork"
+#define PASSWORD "MyPassword"
 
 const int redPin = 44; 
 const int greenPin = 45;

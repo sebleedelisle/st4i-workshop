@@ -17,8 +17,8 @@ Servo servo1;
 #define PORT         8102
 
 
-#define WIFI "Sebs"
-#define PASSWORD "Internet"
+#define WIFI "MyWifiNetwork"
+#define PASSWORD "MyPassword"
 
 String id = String("Seb");
 

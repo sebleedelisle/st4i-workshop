@@ -12,8 +12,8 @@ ST4iWifiManager wifi;
 #define PATH         "/"
 #define PORT         8102
 
-#define WIFI "68 Middle Street"
-#define PASSWORD "thund3rstorm"
+#define WIFI "MyWifiNetwork"
+#define PASSWORD "MyPassword"
 
 // Change this to YOUR name!
 String id = String("Seb");

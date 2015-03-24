@@ -7,8 +7,8 @@
 
 
 
-#define WIFI "68 Middle Street"
-#define PASSWORD "thund3rstorm"
+#define WIFI "MyWifiNetwork"
+#define PASSWORD "MyPassword"
 
 #include <JsonParser.h>
 #include "utility/debug.h" // for the freemem util
