@@ -7,27 +7,76 @@
  
  **********
  pin 26 is connected to the DataIn 
- pin 27 is connected to the CLK 
- pin 28 is connected to LOAD 
+ pin 28 is connected to the CS / LOAD 
+ pin 30 is connected to CLK 
  We have only a single MAX72XX.
  
  */
-LedControl lc=LedControl(26,27,28,1);
-
+LedControl lc=LedControl(26,30,28,1);
+// brightness = 0 to 15
+const int brightness =15; 
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=100;
 
+float angle = 0; 
+float speed = 0.1; 
+
+
 void setup() {
+  Serial.begin(115200);
+
   /*
    The MAX72XX is in power-saving mode on startup,
    we have to do a wakeup call
    */
   lc.shutdown(0,false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0,2);
+  lc.setIntensity(0,brightness);
   /* and clear the display */
   lc.clearDisplay(0);
 }
+
+
+
+void loop() {
+  
+      speed = (sin((float)millis()*0.0001f)) *0.1;
+      angle += speed; //  (PI*2.0f) * (float)(i/360.0f); 
+      
+      float x = cos(angle)*3.5; 
+      float y = sin(angle)*3.5; 
+//      Serial.print(angle); 
+//      Serial.print(","); 
+//      Serial.print(x); 
+//      Serial.print(","); 
+//      Serial.println(y); 
+
+      lc.setLed(0,x+4,y+4,true);
+      lc.setLed(0,4-x,4-y,true);
+      delay(delaytime/40);
+      lc.setLed(0,x+4,y+4,false);
+      lc.setLed(0,4-x,4-y,false);
+  
+  //writeArduinoOnMatrix();
+ // spin(); 
+//  rows();
+//  columns();
+//  single();
+//  single();
+//  single();
+}
+
+void spin() { 
+  //for(float j=0; j<3.5; j+=0.5) { 
+    for(int i = 0; i<360; i+=3) { 
+
+
+    }  
+ //}
+
+
+}
+
 
 /*
  This method will display the characters for the
@@ -36,13 +85,20 @@ void setup() {
  */
 void writeArduinoOnMatrix() {
   /* here is the data for the characters */
-  byte a[5]={B01111110,B10001000,B10001000,B10001000,B01111110};
-  byte r[5]={B00111110,B00010000,B00100000,B00100000,B00010000};
-  byte d[5]={B00011100,B00100010,B00100010,B00010010,B11111110};
-  byte u[5]={B00111100,B00000010,B00000010,B00000100,B00111110};
-  byte i[5]={B00000000,B00100010,B10111110,B00000010,B00000000};
-  byte n[5]={B00111110,B00010000,B00100000,B00100000,B00011110};
-  byte o[5]={B00011100,B00100010,B00100010,B00100010,B00011100};
+  byte a[5]={
+    B01111110,B10001000,B10001000,B10001000,B01111110  };
+  byte r[5]={
+    B00111110,B00010000,B00100000,B00100000,B00010000  };
+  byte d[5]={
+    B00011100,B00100010,B00100010,B00010010,B11111110  };
+  byte u[5]={
+    B00111100,B00000010,B00000010,B00000100,B00111110  };
+  byte i[5]={
+    B00000000,B00100010,B10111110,B00000010,B00000000  };
+  byte n[5]={
+    B00111110,B00010000,B00100000,B00100000,B00011110  };
+  byte o[5]={
+    B00011100,B00100010,B00100010,B00100010,B00011100  };
 
   /* now display them one by one with a small delay */
   lc.setRow(0,0,a[0]);
@@ -108,10 +164,10 @@ void rows() {
     delay(delaytime);
     lc.setRow(0,row,(byte)0);
     //for(int i=0;i<row;i++) {
-//      delay(delaytime);
-//      lc.setRow(0,row,B11111111);
-//      delay(delaytime);
-//      lc.setRow(0,row,(byte)0);
+    //      delay(delaytime);
+    //      lc.setRow(0,row,B11111111);
+    //      delay(delaytime);
+    //      lc.setRow(0,row,(byte)0);
     //}
   }
 }
@@ -128,7 +184,7 @@ void columns() {
     lc.setColumn(0,col,B11111111);
     delay(delaytime);
     lc.setColumn(0,col,(byte)0);
-  
+
   }
 }
 
@@ -143,16 +199,9 @@ void single() {
       delay(delaytime/10);
       lc.setLed(0,row,col,true);
       delay(delaytime/10);
-        lc.setLed(0,row,col,false);
+      lc.setLed(0,row,col,false);
     }
   }
 }
 
-void loop() { 
-  writeArduinoOnMatrix();
-  rows();
-  columns();
-  single();
-   single();
-    single();
-}
+

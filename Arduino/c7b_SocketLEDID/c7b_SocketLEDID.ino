@@ -126,13 +126,7 @@ void dataArrived(WebSocketClient wsclient, String data) {
       noTone(buzzerPin);
     }
   } 
-  else if(strcmp(type,"message")==0) { 
-
-    Serial.println("found message"); 
-    char* msg = json["data"]; 
-    Serial.println(msg);
-    
-  }
+ 
 }
 
 

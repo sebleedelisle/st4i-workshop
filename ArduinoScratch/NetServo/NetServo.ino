@@ -82,8 +82,8 @@ void loop() {
   // check websocket
   wsclient.monitor();
 
- int position = map(analogRead(A5),0,1024,0,180);
-  servo1.write(position);
+ //int position = map(analogRead(A5),0,1024,0,180);
+ // servo1.write(position);
 
   // heartbeat code to keep the connection alive 
   if(millis() - lastSend > heartbeatFrequency) { 
@@ -130,6 +130,7 @@ void dataArrived(WebSocketClient wsclient, String data) {
     Serial.println("found light"); 
     int state = json["data"]; 
 
+
     if(state==1) {
       digitalWrite(ledPin, HIGH); 
       servoPosition = 180; 
@@ -140,7 +141,8 @@ void dataArrived(WebSocketClient wsclient, String data) {
       digitalWrite(ledPin, LOW); 
       servoPosition = 20; 
     }
-   // servo1.write(servoPosition);
+    Serial.println(servoPosition); 
+    servo1.write(servoPosition);
   }
 }
 
