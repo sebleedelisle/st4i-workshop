@@ -67,7 +67,7 @@ void loop() {
 // ********** 0 to 1023
   //int brightness = map(analogRead(potPin),0,1023,0,15); 
   int brightness = constrain(map(analogRead(photocellPin), 400,800,0,15),0,15); 
-  Serial.println(analogRead(photocellPin)); 
+  //Serial.println(analogRead(photocellPin)); 
   lc.setIntensity(0,brightness);
   
   delay(10L); // Pause 1 second
