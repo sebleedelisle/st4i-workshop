@@ -5,8 +5,8 @@
 #include <SPI.h>
 #include "ST4iWifiManager.h"
 
-#define WIFI "MyWifiNetwork"
-#define PASSWORD "MyPassword"
+#define WIFI "indi-wifi"
+#define PASSWORD "id1w679mv"
 
 #include <JsonParser.h>
 #include "utility/debug.h" // for the freemem util

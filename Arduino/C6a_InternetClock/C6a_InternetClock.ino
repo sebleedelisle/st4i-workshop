@@ -8,8 +8,8 @@
 
 ST4iWifiManager wifi; 
 
-#define WIFI "MyWifiNetwork"
-#define PASSWORD "MyPassword"
+#define WIFI "indi-wifi"
+#define PASSWORD "id1w679mv"
 
 const int wifiLed = 2; 
 const int photocellPin = A8; 

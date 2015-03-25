@@ -6,8 +6,8 @@
 #include "utility/debug.h"
 
 
-#define WLAN_SSID       "MyWifiNetwork"           // cannot be longer than 32 characters!
-#define WLAN_PASS       "MyPassword"
+#define WLAN_SSID       "indi-wifi"           // cannot be longer than 32 characters!
+#define WLAN_PASS       "id1w679mv"
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 // These are the interrupt and control pins
 #define ADAFRUIT_CC3000_IRQ   3  // MUST be an interrupt pin!

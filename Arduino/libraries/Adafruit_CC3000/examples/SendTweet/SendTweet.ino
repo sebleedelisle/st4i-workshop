@@ -105,7 +105,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(
 
 // WiFi access point credentials
 #define WLAN_SSID     "myNetwork"  // 32 characters max
-#define WLAN_PASS     "myPassword"
+#define WLAN_PASS     "id1w679mv"
 #define WLAN_SECURITY WLAN_SEC_WPA2 // WLAN_SEC_UNSEC/WLAN_SEC_WEP/WLAN_SEC_WPA/WLAN_SEC_WPA2
 
 const char PROGMEM

@@ -16,8 +16,8 @@ WifiManager wifi;
 #define PORT         8103
 
 
-#define WIFI "MyWifiNetwork"
-#define PASSWORD "MyPassword"
+#define WIFI "indi-wifi"
+#define PASSWORD "id1w679mv"
 
 // Change this to YOUR name!
 String id = String("Seb");

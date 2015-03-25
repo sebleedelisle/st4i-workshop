@@ -11,8 +11,8 @@ WifiManager wifi;
 #define PORT         8101
 
 
-#define WIFI "MyWifiNetwork"
-#define PASSWORD "MyPassword"
+#define WIFI "indi-wifi"
+#define PASSWORD "id1w679mv"
 
 
 const int redPin = 44; 
