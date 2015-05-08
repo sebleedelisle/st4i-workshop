@@ -29,6 +29,7 @@ void loop() {
   //H2R_HSBtoRGB(int hue, int saturation, int brightness, int* rbg_array);
   int hue = map(analogRead(potPin),0,1024,0,360);
   
+  
   H2R_HSBtoRGB(hue , 100, brightness, &rgb[0]); 
 
   analogWrite(redPin, rgb[0]); 

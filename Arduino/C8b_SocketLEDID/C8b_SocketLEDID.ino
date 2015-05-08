@@ -111,6 +111,7 @@ void dataArrived(WebSocketClient wsclient, String data) {
   const char* type = json["type"]; 
 
   Serial.println(type); 
+  // strcmp is String Compare 
   if(strcmp(type,"light")==0) { 
 
     Serial.println("found light"); 

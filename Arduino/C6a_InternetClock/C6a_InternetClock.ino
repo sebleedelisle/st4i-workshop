@@ -8,8 +8,8 @@
 
 ST4iWifiManager wifi; 
 
-#define WIFI "indi-wifi"
-#define PASSWORD "id1w679mv"
+#define WIFI "SebsAirport"
+#define PASSWORD "Internet"
 
 const int wifiLed = 2; 
 const int photocellPin = A8; 
@@ -64,10 +64,14 @@ void loop() {
 
     }
   }
-// ********** 0 to 1023
-  //int brightness = map(analogRead(potPin),0,1023,0,15); 
-  int brightness = constrain(map(analogRead(photocellPin), 400,800,0,15),0,15); 
+  //  analogRead returns 0 to 1023 
+  int brightness = map(analogRead(potPin),0,1023,0,15); 
+  
+  // if you want the clock to dim automatically in the dark, add 
+  // a photocell and uncomment this line : 
+  //int brightness = constrain(map(analogRead(photocellPin), 400,800,0,15),0,15); 
   //Serial.println(analogRead(photocellPin)); 
+  
   lc.setIntensity(0,brightness);
   
   delay(10L); // Pause 1 second

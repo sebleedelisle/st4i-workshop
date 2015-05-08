@@ -57,7 +57,7 @@ void loop() {
   }
 
   // heartbeat code to keep the connection alive 
-  if(millis() - lastSend > heartbeatFrequency) { 
+  if((unsigned long) (millis() - lastSend) > heartbeatFrequency) { 
     Serial.print("*"); 
     wsclient.send("{\"type\" : \"heartbeat\"}");
     lastSend = millis();

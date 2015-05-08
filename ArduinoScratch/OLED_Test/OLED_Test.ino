@@ -1,8 +1,6 @@
 
 #include "U8glib.h"
 
-//U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);
-//U8GLIB_SH1106_128X64_2X u8g(U8G_I2C_OPT_NONE); // I think the 2X option uses double the memory but should be faster
 U8GLIB_SSD1306_128X64_2X u8g(U8G_I2C_OPT_NO_ACK); 
 uint8_t draw_state = 0;
 

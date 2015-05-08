@@ -7,12 +7,12 @@
  
  **********
  pin 26 is connected to the DataIn 
- pin 27 is connected to the CLK 
- pin 28 is connected to LOAD 
+ pin 28 is connected to the CS / LOAD 
+ pin 30 is connected to CLK 
  We have only a single MAX72XX.
  
  */
-LedControl lc=LedControl(26,27,28,1);
+LedControl lc=LedControl(26,30,28,1);
 
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=100;
@@ -24,7 +24,7 @@ void setup() {
    */
   lc.shutdown(0,false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0,2);
+  lc.setIntensity(0,15);
   /* and clear the display */
   lc.clearDisplay(0);
 }

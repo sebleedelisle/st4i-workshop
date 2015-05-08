@@ -14,20 +14,14 @@ LedControl lc=LedControl(26,30,28,1);
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=250;
 
-void setup() {  
-  
-  pinMode(11, OUTPUT); 
-  digitalWrite(11, LOW); 
-  pinMode(12, OUTPUT); 
-  digitalWrite(12, HIGH); 
-  
+void setup() {
   /*
    The MAX72XX is in power-saving mode on startup,
    we have to do a wakeup call
    */
   lc.shutdown(0,false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0,1);
+  lc.setIntensity(0,15);
   /* and clear the display */
   lc.clearDisplay(0);
 }
@@ -38,22 +32,31 @@ void setup() {
  word "Arduino" one after the other on digit 0. 
  */
 void writeArduinoOn7Segment() {
-  lc.setChar(0,0,'a',false);
-  delay(delaytime);
-  lc.setRow(0,0,0x05);
-  delay(delaytime);
-  lc.setChar(0,0,'d',false);
-  delay(delaytime);
-  lc.setRow(0,0,0x1c);
-  delay(delaytime);
-  lc.setRow(0,0,B00010000);
-  delay(delaytime);
-  lc.setRow(0,0,0x15);
-  delay(delaytime);
+  lc.setChar(0,6,'a',false);
+  lc.setRow(0,5,0x05);
+  lc.setChar(0,4,'d',false);
+  lc.setRow(0,3,0x1c);
+  lc.setRow(0,2,B00010000);
+  lc.setRow(0,1,0x15);
   lc.setRow(0,0,0x1D);
-  delay(delaytime);
+
+  delay(delaytime*10);
   lc.clearDisplay(0);
-  delay(delaytime);
+
+  lc.setChar(0,7,'-', false);
+  lc.setChar(0,6,'-', false);
+
+  lc.setRow(0,5,B01011011);
+  lc.setRow(0,4,B00001111);
+  lc.setDigit(0,3,4, false);
+  lc.setDigit(0,2,1, false);
+  
+  lc.setChar(0,1,'-', false);
+  lc.setChar(0,0,'-', false);
+
+  delay(delaytime*10);
+  lc.clearDisplay(0);
+
 } 
 
 /*
@@ -78,6 +81,6 @@ void scrollDigits() {
 }
 
 void loop() { 
-  //writeArduinoOn7Segment();
+  writeArduinoOn7Segment();
   scrollDigits();
 }
