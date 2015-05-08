@@ -4,8 +4,8 @@
 
 WifiManager wifi; 
 
-#define WIFI "indi-wifi"
-#define PASSWORD "id1w679mv"
+#define WIFI "LeanDUS"
+#define PASSWORD "LeanDUS2015"
 
 const int wifiLed = 2; 
 

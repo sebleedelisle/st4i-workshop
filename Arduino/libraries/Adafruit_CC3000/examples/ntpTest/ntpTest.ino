@@ -42,8 +42,8 @@ This example does a test of the SNTP (Simple Network Time Protocol) client:
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed but DI
 
-#define WLAN_SSID       "myNetwork"   // cannot be longer than 32 characters!
-#define WLAN_PASS       "id1w679mv"
+#define WLAN_SSID       "LeanDUS"   // cannot be longer than 32 characters!
+#define WLAN_PASS       "LeanDUS2015"
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 

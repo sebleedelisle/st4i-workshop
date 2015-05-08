@@ -8,8 +8,8 @@
 
 ST4iWifiManager wifi; 
 
-#define WIFI "SebsAirport"
-#define PASSWORD "Internet"
+#define WIFI "LeanDUS"
+#define PASSWORD "LeanDUS2015"
 
 const int wifiLed = 2; 
 const int photocellPin = A8; 

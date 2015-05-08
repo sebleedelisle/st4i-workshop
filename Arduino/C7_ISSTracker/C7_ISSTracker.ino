@@ -5,8 +5,8 @@
 #include <SPI.h>
 #include "ST4iWifiManager.h"
 
-#define WIFI "SebsAirport"
-#define PASSWORD "Internet"
+#define WIFI "LeanDUS"
+#define PASSWORD "LeanDUS2015"
 
 #include <JsonParser.h>
 #include "utility/debug.h" // for the freemem util

@@ -15,8 +15,8 @@
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT, SPI_CLOCK_DIV2); 
 SocketIOClient client;
 
-#define WLAN_SSID "indi-wifi" 
-#define WLAN_PASS "id1w679mv"
+#define WLAN_SSID "LeanDUS" 
+#define WLAN_PASS "LeanDUS2015"
 #define WLAN_SECURITY WLAN_SEC_WPA2
 
 void setup() { 

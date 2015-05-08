@@ -10,8 +10,8 @@ ST4iWifiManager wifi;
 #define PATH         "/"
 #define PORT         8101
 
-#define WIFI "indi-wifi"
-#define PASSWORD "id1w679mv"
+#define WIFI "LeanDUS"
+#define PASSWORD "LeanDUS2015"
 
 const int redPin = 44; 
 const int greenPin = 45;
