@@ -11,7 +11,7 @@ void setup() {
 
 
 void loop() {
-  int brightness = map( analogRead(potPin), 0, 1024,0,255); 
+  int brightness = map( analogRead(potPin), 0, 1023,0,255); 
   analogWrite(ledPin, brightness); 
 }
 
