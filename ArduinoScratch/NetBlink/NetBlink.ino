@@ -11,8 +11,8 @@ WifiManager wifi;
 #define PORT         8101
 
 
-#define WIFI "LeanDUS"
-#define PASSWORD "LeanDUS2015"
+#define WIFI "SebsAirport"
+#define PASSWORD "Internet"
 
 
 const int redPin = 44; 

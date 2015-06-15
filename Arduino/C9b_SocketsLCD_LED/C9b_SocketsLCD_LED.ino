@@ -22,8 +22,8 @@ Adafruit_NeoPixel strip(numPixels, 22,  NEO_GRB + NEO_KHZ800);
 #define PATH         "/"
 #define PORT         8102
 
-#define WIFI "LeanDUS"
-#define PASSWORD "LeanDUS2015"
+#define WIFI "SebsAirport"
+#define PASSWORD "Internet"
 
 // Change this to YOUR name!
 String id = String("Seb");
