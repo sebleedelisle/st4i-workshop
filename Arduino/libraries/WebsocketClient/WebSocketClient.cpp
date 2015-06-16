@@ -26,37 +26,35 @@
  THE SOFTWARE.
  */
 
-#define __PROG_TYPES_COMPAT__
-
 #include <WebSocketClient.h>
 #include <WString.h>
 #include <string.h>
 #include <stdlib.h>
 
 
-const prog_char stringVar[] PROGMEM = "{0}";
-const prog_char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
-const prog_char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
-const prog_char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
-const prog_char clientHandshakeLine4[] PROGMEM = "Host: {0}";
-const prog_char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
+const char stringVar[] PROGMEM = "{0}";
+const char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
+const char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
+const char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
+const char clientHandshakeLine4[] PROGMEM = "Host: {0}";
+const char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
 
-const prog_char serverHandshake[] PROGMEM = "HTTP/1.1 101";
+const char serverHandshake[] PROGMEM = "HTTP/1.1 101";
 
 
-const prog_char WebSocketClientStringTable[7] PROGMEM = {
-     *stringVar,
-     *clientHandshakeLine1,
-     *clientHandshakeLine2,
-     *clientHandshakeLine3,
-     *clientHandshakeLine4,
-     *clientHandshakeLine5,
-     *serverHandshake
- };
+const char* WebSocketClientStringTable[7] = {
+     stringVar,
+     clientHandshakeLine1,
+     clientHandshakeLine2,
+     clientHandshakeLine3,
+     clientHandshakeLine4,
+     clientHandshakeLine5,
+     serverHandshake
+};
 
 String WebSocketClient::getStringTableItem(int index) {
     char buffer[35];
-    strcpy_P(buffer, (char*)pgm_read_word(&(WebSocketClientStringTable[index])));
+    strcpy_P(buffer, WebSocketClientStringTable[index]);
     return String(buffer);
 }
 
@@ -134,7 +132,7 @@ void WebSocketClient::sendHandshake(char hostname[], char path[]) {
     
     line1.replace(stringVar, path);
     line4.replace(stringVar, hostname);
-    
+
 
 	Serial.println("sending"); 
 	Serial.println(line1);
