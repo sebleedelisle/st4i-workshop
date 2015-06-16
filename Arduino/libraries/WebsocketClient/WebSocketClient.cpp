@@ -26,30 +26,33 @@
  THE SOFTWARE.
  */
 
+#define __PROG_TYPES_COMPAT__
+
 #include <WebSocketClient.h>
 #include <WString.h>
 #include <string.h>
 #include <stdlib.h>
 
-prog_char stringVar[] PROGMEM = "{0}";
-prog_char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
-prog_char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
-prog_char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
-prog_char clientHandshakeLine4[] PROGMEM = "Host: {0}";
-prog_char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
 
-prog_char serverHandshake[] PROGMEM = "HTTP/1.1 101";
+const prog_char stringVar[] PROGMEM = "{0}";
+const prog_char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
+const prog_char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
+const prog_char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
+const prog_char clientHandshakeLine4[] PROGMEM = "Host: {0}";
+const prog_char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
 
-PROGMEM const char *WebSocketClientStringTable[] =
-{   
-    stringVar,
-    clientHandshakeLine1,
-    clientHandshakeLine2,
-    clientHandshakeLine3,
-    clientHandshakeLine4,
-    clientHandshakeLine5,
-    serverHandshake
-};
+const prog_char serverHandshake[] PROGMEM = "HTTP/1.1 101";
+
+
+const prog_char WebSocketClientStringTable[7] PROGMEM = {
+     *stringVar,
+     *clientHandshakeLine1,
+     *clientHandshakeLine2,
+     *clientHandshakeLine3,
+     *clientHandshakeLine4,
+     *clientHandshakeLine5,
+     *serverHandshake
+ };
 
 String WebSocketClient::getStringTableItem(int index) {
     char buffer[35];
