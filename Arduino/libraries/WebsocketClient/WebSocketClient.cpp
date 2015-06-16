@@ -31,29 +31,30 @@
 #include <string.h>
 #include <stdlib.h>
 
-prog_char stringVar[] PROGMEM = "{0}";
-prog_char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
-prog_char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
-prog_char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
-prog_char clientHandshakeLine4[] PROGMEM = "Host: {0}";
-prog_char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
 
-prog_char serverHandshake[] PROGMEM = "HTTP/1.1 101";
+const char stringVar[] PROGMEM = "{0}";
+const char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
+const char clientHandshakeLine2[] PROGMEM = "Upgrade: WebSocket";
+const char clientHandshakeLine3[] PROGMEM = "Connection: Upgrade";
+const char clientHandshakeLine4[] PROGMEM = "Host: {0}";
+const char clientHandshakeLine5[] PROGMEM = "Origin: ArduinoWebSocketClient";
 
-PROGMEM const char *WebSocketClientStringTable[] =
-{   
-    stringVar,
-    clientHandshakeLine1,
-    clientHandshakeLine2,
-    clientHandshakeLine3,
-    clientHandshakeLine4,
-    clientHandshakeLine5,
-    serverHandshake
+const char serverHandshake[] PROGMEM = "HTTP/1.1 101";
+
+
+const char* WebSocketClientStringTable[7] = {
+     stringVar,
+     clientHandshakeLine1,
+     clientHandshakeLine2,
+     clientHandshakeLine3,
+     clientHandshakeLine4,
+     clientHandshakeLine5,
+     serverHandshake
 };
 
 String WebSocketClient::getStringTableItem(int index) {
     char buffer[35];
-    strcpy_P(buffer, (char*)pgm_read_word(&(WebSocketClientStringTable[index])));
+    strcpy_P(buffer, WebSocketClientStringTable[index]);
     return String(buffer);
 }
 
@@ -131,7 +132,7 @@ void WebSocketClient::sendHandshake(char hostname[], char path[]) {
     
     line1.replace(stringVar, path);
     line4.replace(stringVar, hostname);
-    
+
 
 	Serial.println("sending"); 
 	Serial.println(line1);
